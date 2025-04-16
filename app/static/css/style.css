@@ -1,0 +1,124 @@
+/* SkillSwap Custom Styles */
+
+/* Global Styles */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* Card hover effects */
+.card-hover:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Skill difficulty badges */
+.badge-beginner {
+    background-color: #28a745;
+}
+
+.badge-intermediate {
+    background-color: #fd7e14;
+}
+
+.badge-advanced {
+    background-color: #dc3545;
+}
+
+/* Category icons */
+.category-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    margin-right: 10px;
+}
+
+/* Custom button styles */
+.btn-skill {
+    color: #fff;
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+}
+
+.btn-skill:hover {
+    color: #fff;
+    background-color: #5a32a3;
+    border-color: #5a32a3;
+}
+
+/* Message styles */
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    max-width: 80%;
+}
+
+.message-sent {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+}
+
+.message-received {
+    background-color: #f0f0f0;
+    margin-right: auto;
+}
+
+/* Rating stars */
+.star-rating {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+/* Notification badge */
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+/* Custom form styles */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Featured skill card */
+.featured-skill {
+    border-left: 5px solid #007bff;
+}
+
+/* Skill category pills */
+.category-pill {
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* User avatar */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Footer styling */
+footer {
+    margin-top: auto;
+}

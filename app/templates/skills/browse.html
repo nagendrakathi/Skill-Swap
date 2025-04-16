@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <!-- Filter Sidebar -->
+    <div class="col-lg-3 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-filter"></i> Filters</h5>
+            </div>
+            <div class="card-body">
+                <!-- Search Form -->
+                <form id="skillSearchForm" method="GET" action="{{ url_for('skills.browse') }}">
+                    <div class="mb-4">
+                        <label for="searchQuery" class="form-label">Search</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchQuery" name="search" 
+                                   placeholder="Search skills..." value="{{ search or '' }}">
+                            <button class="btn btn-outline-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Category Filter -->
+                <div class="mb-3">
+                    <h6 class="fw-bold">Categories</h6>
+                    <div class="list-group">
+                        <a href="{{ url_for('skills.browse') }}" 
+                           class="list-group-item list-group-item-action category-filter {% if not current_category %}active{% endif %}">
+                            All Categories
+                        </a>
+                        {% for category in categories %}
+                        <a href="{{ url_for('skills.browse', category=category) }}" 
+                           class="list-group-item list-group-item-action category-filter {% if current_category == category %}active{% endif %}"
+                           data-category="{{ category }}">
+                            {{ category|capitalize }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Difficulty Filter -->
+                <div class="mb-3">
+                    <h6 class="fw-bold">Difficulty</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="beginner" id="beginnerCheck">
+                        <label class="form-check-label" for="beginnerCheck">
+                            Beginner
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="intermediate" id="intermediateCheck">
+                        <label class="form-check-label" for="intermediateCheck">
+                            Intermediate
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="advanced" id="advancedCheck">
+                        <label class="form-check-label" for="advancedCheck">
+                            Advanced
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Reset Filters Button -->
+                <div class="d-grid">
+                    <a href="{{ url_for('skills.browse') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo"></i> Reset Filters
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Skills List -->
+    <div class="col-lg-9">
+        <!-- Results Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">
+                {% if current_category %}
+                    {{ current_category|capitalize }} Skills
+                {% elif search %}
+                    Search Results for "{{ search }}"
+                {% else %}
+                    All Available Skills
+                {% endif %}
+            </h3>
+            <span class="text-muted">{{ skills.total }} results</span>
+        </div>
+        
+        {% if skills.items %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for skill in skills.items %}
+                <div class="col">
+                    <div class="card h-100 skill-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="badge bg-primary">{{ skill.category|capitalize }}</span>
+                            <span class="badge {% if skill.difficulty == 'beginner' %}bg-success{% elif skill.difficulty == 'intermediate' %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                                {{ skill.difficulty|capitalize }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ skill.name }}</h5>
+                            <p class="card-text">{{ skill.description|truncate(100) }}</p>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    Offered by <strong>{{ skill.owner.username }}</strong>
+                                </small>
+                                <a href="{{ url_for('skills.detail', skill_id=skill.id) }}" class="btn btn-sm btn-primary">
+                                    Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if skills.pages > 1 %}
+            <nav aria-label="Skill page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if skills.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('skills.browse', page=skills.prev_num, category=current_category, search=search) }}">
+                            Previous
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in skills.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                        {% if page_num %}
+                            {% if page_num == skills.page %}
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">{{ page_num }}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('skills.browse', page=page_num, category=current_category, search=search) }}">
+                                    {{ page_num }}
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if skills.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('skills.browse', page=skills.next_num, category=current_category, search=search) }}">
+                            Next
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                {% if search %}
+                    No skills found matching your search criteria. Try different keywords or <a href="{{ url_for('skills.browse') }}">view all skills</a>.
+                {% elif current_category %}
+                    No skills available in this category yet. <a href="{{ url_for('skills.browse') }}">View all skills</a>.
+                {% else %}
+                    No skills have been added yet. Be the first to <a href="{{ url_for('skills.add') }}">add a skill</a>!
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

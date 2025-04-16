@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-exchange-alt"></i> Manage Requests</h3>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="requestTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="received-tab" data-bs-toggle="tab" 
+                                data-bs-target="#received" type="button" role="tab" 
+                                aria-controls="received" aria-selected="true">
+                            Received Requests <span class="badge bg-primary">{{ requests_received|length }}</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="sent-tab" data-bs-toggle="tab" 
+                                data-bs-target="#sent" type="button" role="tab" 
+                                aria-controls="sent" aria-selected="false">
+                            Sent Requests <span class="badge bg-secondary">{{ requests_sent|length }}</span>
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content pt-4" id="requestTabsContent">
+                    <!-- Received Requests Tab -->
+                    <div class="tab-pane fade show active" id="received" role="tabpanel" aria-labelledby="received-tab">
+                        {% if requests_received %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Requester</th>
+                                            <th>Skill</th>
+                                            <th>Message</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for request in requests_received %}
+                                        <tr>
+                                            <td>{{ request.requester.username }}</td>
+                                            <td>
+                                                <a href="{{ url_for('skills.detail', skill_id=request.skill.id) }}">
+                                                    {{ request.skill.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-link" data-bs-toggle="modal" data-bs-target="#messageModal{{ request.id }}">
+                                                    {{ request.message|truncate(20) if request.message else 'No message' }}
+                                                </button>
+                                                
+                                                <!-- Message Modal -->
+                                                <div class="modal fade" id="messageModal{{ request.id }}" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Request Message</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                {% if request.message %}
+                                                                    <p>{{ request.message }}</p>
+                                                                {% else %}
+                                                                    <p class="text-muted">No message provided with this request.</p>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ request.created_at.strftime('%b %d, %Y') }}</td>
+                                            <td>
+                                                {% if request.status == 'pending' %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elif request.status == 'accepted' %}
+                                                    <span class="badge bg-success">Accepted</span>
+                                                {% elif request.status == 'rejected' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if request.status == 'pending' %}
+                                                    <div class="btn-group btn-group-sm">
+                                                        <form action="{{ url_for('requests.accept_request', request_id=request.id) }}" method="POST" class="d-inline">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                            <button type="submit" class="btn btn-success request-action-btn" data-action="accept">
+                                                                <i class="fas fa-check"></i> Accept
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ url_for('requests.reject_request', request_id=request.id) }}" method="POST" class="d-inline">
+                                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                            <button type="submit" class="btn btn-danger request-action-btn" data-action="reject">
+                                                                <i class="fas fa-times"></i> Reject
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+                                                <a href="{{ url_for('requests.messages', request_id=request.id) }}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-comments"></i> Messages
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> You haven't received any requests yet.
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Sent Requests Tab -->
+                    <div class="tab-pane fade" id="sent" role="tabpanel" aria-labelledby="sent-tab">
+                        {% if requests_sent %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Skill</th>
+                                            <th>Owner</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for request in requests_sent %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ url_for('skills.detail', skill_id=request.skill.id) }}">
+                                                    {{ request.skill.name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ request.skill_owner.username }}</td>
+                                            <td>{{ request.created_at.strftime('%b %d, %Y') }}</td>
+                                            <td>
+                                                {% if request.status == 'pending' %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elif request.status == 'accepted' %}
+                                                    <span class="badge bg-success">Accepted</span>
+                                                {% elif request.status == 'rejected' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ url_for('requests.messages', request_id=request.id) }}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-comments"></i> Messages
+                                                </a>
+                                                {% if request.status == 'accepted' %}
+                                                    <a href="{{ url_for('requests.review', request_id=request.id) }}" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-star"></i> Leave Review
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> You haven't sent any requests yet.
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="{{ url_for('skills.browse') }}" class="btn btn-primary">Browse Skills</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
