@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import current_user, login_required
 from app.models import Skill, Request, User
+from app import db  # Import the db instance
 from sqlalchemy import func
 
 main = Blueprint('main', __name__)

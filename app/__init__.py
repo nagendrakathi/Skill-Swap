@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 from config import Config
+from datetime import datetime
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -34,5 +35,10 @@ def create_app(config_class=Config):
     # Create database tables if they don't exist
     with app.app_context():
         db.create_all()
+    
+    # Add context processor for current date and time
+    @app.context_processor
+    def inject_now():
+        return {'now': datetime.utcnow()}
     
     return app
