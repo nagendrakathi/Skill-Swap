@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-tachometer-alt"></i> My Dashboard</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <h5>Skills I Offer</h5>
+                        <h2 class="display-4">{{ my_skills|length }}</h2>
+                    </div>
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <h5>Pending Requests</h5>
+                        <h2 class="display-4">{{ pending_requests|length }}</h2>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h5>Learning Requests</h5>
+                        <h2 class="display-4">{{ my_requests|length }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="fas fa-lightbulb"></i> My Skills</h4>
+                    <a href="{{ url_for('skills.add') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Add Skill
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for skill in my_skills %}
+                    <a href="{{ url_for('skills.detail', skill_id=skill.id) }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ skill.name }}</h5>
+                            <small class="text-muted">{{ skill.category|capitalize }}</small>
+                        </div>
+                        <p class="mb-1 text-truncate">{{ skill.description }}</p>
+                        <small class="text-muted">
+                            <span class="badge bg-info">{{ skill.difficulty|capitalize }}</span>
+                            <span class="ms-2">{{ skill.learners.count() }} learning</span>
+                        </small>
+                    </a>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <p>You haven't added any skills yet.</p>
+                        <a href="{{ url_for('skills.add') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Your First Skill
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="fas fa-bell"></i> Pending Requests</h4>
+                    <a href="{{ url_for('requests.manage') }}" class="btn btn-outline-primary btn-sm">View All</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for request in pending_requests[:5] %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ request.requester.username }} wants to learn {{ request.skill.name }}</h5>
+                            <small class="text-muted">{{ request.created_at.strftime('%b %d') }}</small>
+                        </div>
+                        {% if request.message %}
+                            <p class="mb-1">{{ request.message }}</p>
+                        {% endif %}
+                        <div class="mt-2">
+                            <form action="{{ url_for('requests.accept_request', request_id=request.id) }}" method="POST" class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form action="{{ url_for('requests.reject_request', request_id=request.id) }}" method="POST" class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                            </form>
+                            <a href="{{ url_for('requests.messages', request_id=request.id) }}" class="btn btn-outline-primary btn-sm">Message</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-center py-4">No pending requests at the moment.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-star"></i> Recommended Skills</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for skill in recommended_skills %}
+                    <div class="col-md-4 col-lg-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ skill.name }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ skill.category|capitalize }}</h6>
+                                <p class="card-text">{{ skill.description|truncate(100) }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ url_for('skills.detail', skill_id=skill.id) }}" class="btn btn-primary btn-sm">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-center">Explore more skills to get personalized recommendations!</p>
+                        <div class="text-center">
+                            <a href="{{ url_for('skills.browse') }}" class="btn btn-primary">Browse Skills</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

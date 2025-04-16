@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-3 text-center mb-4">
+    <h1 class="display-4">Welcome to SkillSwap!</h1>
+    <p class="lead">Share your knowledge and learn new skills from others in our collaborative community.</p>
+    <hr class="my-4">
+    <p>Join our platform to start teaching others what you're good at while learning new skills in return.</p>
+    {% if not current_user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-2">Join Now</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+        </div>
+    {% else %}
+        <div class="mt-4">
+            <a href="{{ url_for('skills.browse') }}" class="btn btn-primary btn-lg">Browse Skills</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Share Knowledge</h3>
+                <p class="card-text">Teach others what you excel at. Share your expertise and help others learn.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Learn New Skills</h3>
+                <p class="card-text">Expand your horizons by learning directly from skilled individuals.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-people-arrows fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Build Connections</h3>
+                <p class="card-text">Connect with like-minded individuals who share your interests.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Platform Statistics</h4>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-6 mb-3">
+                        <h5>Total Skills Available</h5>
+                        <h2 class="display-4">{{ skill_count }}</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Community Members</h5>
+                        <h2 class="display-4">{{ user_count }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Top Categories</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for category, count in top_categories %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ category|capitalize }}
+                            <span class="badge bg-primary rounded-pill">{{ count }}</span>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item">No categories available yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
