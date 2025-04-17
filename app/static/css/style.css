@@ -1,124 +1,689 @@
-/* SkillSwap Custom Styles */
+/* SkillSwap Enhanced Styles */
+
+:root {
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --secondary: #4cc9f0;
+  --success: #4CAF50;
+  --danger: #f72585;
+  --warning: #ffd166;
+  --info: #4cc9f0;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --body-bg: #f5f8ff;
+  --card-shadow: 0 4px 20px rgba(138, 149, 158, 0.15);
+  --hover-shadow: 0 10px 25px rgba(67, 97, 238, 0.15);
+  --text-color: #333;
+}
 
 /* Global Styles */
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  background-color: var(--body-bg);
+  color: var(--text-color);
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.3s ease;
 }
 
-main {
-    flex: 1;
+/* Animated Gradient Background */
+.jumbotron {
+  background: linear-gradient(-45deg, #4361ee, #3a56d4, #4cc9f0, #4895ef);
+  background-size: 400% 400%;
+  animation: gradient-bg 15s ease infinite;
+  color: white;
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  position: relative;
 }
 
-/* Card hover effects */
-.card-hover:hover {
-    transform: translateY(-5px);
-    transition: transform 0.3s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+@keyframes gradient-bg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-/* Skill difficulty badges */
-.badge-beginner {
-    background-color: #28a745;
+/* Enhanced Cards */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.badge-intermediate {
-    background-color: #fd7e14;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
 }
 
-.badge-advanced {
-    background-color: #dc3545;
+.card-header {
+  border-bottom: none;
+  padding: 1rem 1.25rem;
 }
 
-/* Category icons */
-.category-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: #f8f9fa;
-    margin-right: 10px;
+.bg-primary {
+  background-color: var(--primary) !important;
 }
 
-/* Custom button styles */
-.btn-skill {
-    color: #fff;
-    background-color: #6f42c1;
-    border-color: #6f42c1;
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  transition: all 0.3s ease;
 }
 
-.btn-skill:hover {
-    color: #fff;
-    background-color: #5a32a3;
-    border-color: #5a32a3;
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(67, 97, 238, 0.25);
 }
 
-/* Message styles */
+/* Skill Cards */
+.skill-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--hover-shadow);
+}
+
+/* Navigation */
+.navbar {
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover:after {
+  width: 100%;
+}
+
+/* Animated Icons */
+.fa-3x {
+  transition: all 0.5s ease;
+}
+
+.card:hover .fa-3x {
+  transform: scale(1.2);
+  color: var(--primary);
+}
+
+/* Notification badge animation */
+.notification-badge:not(.d-none) {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Form elements */
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+}
+
+/* Custom badge styles */
+.badge {
+  padding: 0.5em 0.8em;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+}
+
+/* Messages styles */
+.message-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
 .message-bubble {
-    padding: 10px 15px;
-    border-radius: 15px;
-    margin-bottom: 10px;
-    max-width: 80%;
+  border-radius: 18px;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  position: relative;
+  animation: fadeIn 0.5s ease;
+  max-width: 80%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .message-sent {
-    background-color: #007bff;
-    color: white;
-    margin-left: auto;
+  background-color: var(--primary);
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 5px;
 }
 
 .message-received {
-    background-color: #f0f0f0;
-    margin-right: auto;
+  background-color: #f0f2f5;
+  color: var(--text-color);
+  margin-right: auto;
+  border-bottom-left-radius: 5px;
 }
 
-/* Rating stars */
-.star-rating {
-    color: #ffc107;
-    font-size: 1.2rem;
+/* Pagination enhancements */
+.pagination .page-link {
+  border-radius: 8px;
+  margin: 0 3px;
+  border: none;
+  color: var(--primary);
+  transition: all 0.3s ease;
 }
 
-/* Notification badge */
-.notification-badge {
+.pagination .page-item.active .page-link {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.pagination .page-link:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Dashboard cards animation */
+.dashboard-stat {
+  transition: all 0.4s ease;
+}
+
+.dashboard-stat:hover {
+  transform: scale(1.05);
+}
+
+/* Category and filter buttons */
+.category-filter {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.category-filter:hover:not(.active) {
+  background-color: rgba(67, 97, 238, 0.1);
+  transform: translateX(5px);
+}
+
+.category-filter.active {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 500;
+}
+
+/* Footer enhancement */
+footer {
+  position: relative;
+  overflow: hidden;
+}
+
+footer:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+  background-size: 200% 200%;
+  animation: gradient-bg 5s ease infinite;
+}
+
+/* Alert animations */
+.alert {
+  animation: slideIn 0.5s ease;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-dismissible .btn-close {
+  transition: all 0.3s ease;
+}
+
+.alert-dismissible .btn-close:hover {
+  transform: rotate(90deg);
+}
+
+/* User profile elements */
+.user-avatar {
+  border-radius: 50%;
+  border: 3px solid var(--primary);
+  padding: 3px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 5px rgba(67, 97, 238, 0.2);
+}
+
+/* Loading animations */
+.loading {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(67, 97, 238, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {  
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button hover effects */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.btn:hover:after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}
+
+/* Stat numbers counter animation */
+.display-4 {
+  counter-reset: stat-counter 0;
+  animation: countUp 2s forwards;
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+  .message-bubble {
+    max-width: 90%;
+  }
+  
+  .card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .skill-card:hover {
+    transform: translateY(-3px);
+  }
+}/* Animation CSS Additions */
+
+/* Page load animation */
+body {
+    opacity: 0;
+    animation: fadeInPage 0.6s ease forwards;
+  }
+  
+  @keyframes fadeInPage {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Staggered animations for elements */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+  
+  .animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Button hover effects */
+  .btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card entrance animations for dashboard */
+  .card {
+    animation: cardEntrance 0.7s ease-out;
+    animation-fill-mode: backwards;
+  }
+  
+  @keyframes cardEntrance {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Typing indicator animation */
+  .typing-indicator {
+    display: flex;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f0f2f5;
+    border-radius: 10px;
+    width: fit-content;
+  }
+  
+  .typing-indicator span {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background-color: #4361ee;
+    margin: 0 2px;
+    display: inline-block;
+    animation: bounce 1.3s linear infinite;
+  }
+  
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  
+  @keyframes bounce {
+    0%, 60%, 100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-4px);
+    }
+  }
+  
+  /* Pulse animation */
+  .pulse {
+    animation: pulse-animation 1s infinite;
+  }
+  
+  @keyframes pulse-animation {
+    0% {
+      box-shadow: 0 0 0 0 rgba(247, 37, 133, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(247, 37, 133, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(247, 37, 133, 0);
+    }
+  }
+  
+  /* Nav hover effect */
+  .nav-hover {
+    animation: navHover 0.3s forwards;
+  }
+  
+  @keyframes navHover {
+    to {
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  /* Staggered card entrance */
+  .card:nth-child(1) { animation-delay: 0.1s; }
+  .card:nth-child(2) { animation-delay: 0.2s; }
+  .card:nth-child(3) { animation-delay: 0.3s; }
+  .card:nth-child(4) { animation-delay: 0.4s; }
+  
+  /* Flash message animations */
+  .alert {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+    animation-name: slideInDown;
+  }
+  
+  @keyframes slideInDown {
+    from {
+      transform: translate3d(0, -100%, 0);
+      visibility: visible;
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  /* Category badge hover effect */
+  .badge {
+    transition: all 0.3s ease;
+  }
+  
+  .badge:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Table row hover animation */
+  tr {
+    transition: all 0.3s ease;
+  }
+  
+  tr:hover {
+    transform: translateX(5px);
+    background-color: rgba(67, 97, 238, 0.05) !important;
+  }
+  
+  /* Form field focus animation */
+  .form-control:focus, .form-select:focus {
+    animation: formFocus 0.3s forwards;
+  }
+  
+  @keyframes formFocus {
+    from {
+      box-shadow: 0 0 0 0.1rem rgba(67, 97, 238, 0.15);
+    }
+    to {
+      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    }
+  }
+  
+  /* Floating label animation */
+  .form-floating > .form-control:focus ~ label,
+  .form-floating > .form-control:not(:placeholder-shown) ~ label,
+  .form-floating > .form-select ~ label {
+    opacity: 0.65;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+  }
+  
+  /* Progress bar animation */
+  .progress-bar {
+    animation: progressBar 1.5s ease-in-out;
+  }
+  
+  @keyframes progressBar {
+    from {
+      width: 0;
+    }
+  }
+  
+  /* Subtle shimmer effect for cards */
+  .card::after {
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
-    transform: translate(50%, -50%);
-}
-
-/* Custom form styles */
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-/* Featured skill card */
-.featured-skill {
-    border-left: 5px solid #007bff;
-}
-
-/* Skill category pills */
-.category-pill {
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-/* User avatar */
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-/* Footer styling */
-footer {
-    margin-top: auto;
-}
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .card:hover::after {
+    animation: shimmer 1.5s infinite;
+    opacity: 1;
+  }
+  
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  /* Page transition effect */
+  .page-loaded {
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
