@@ -21,6 +21,20 @@ class Config:
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app/static/uploads')
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB max upload
 
+    # CSRF settings - relaxed for development
+    WTF_CSRF_CHECK_DEFAULT = True
+    WTF_CSRF_SSL_STRICT = False  # Allows HTTP -> HTTPS and vice versa
+    
+    # Only set SERVER_NAME if needed - can cause routing issues
+    SERVER_NAME = os.environ.get('SERVER_NAME') or os.environ.get('HOSTNAME') or "localhost:8000"
+    
+    # This is safer than using SERVER_NAME for CSRF
+    WTF_CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8000',
+        'https://localhost:8000',
+        f"https://{os.environ.get('HOSTNAME')}"
+    ]
+
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
@@ -29,3 +43,8 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_SECURE = os.environ.get('REMEMBER_COOKIE_SECURE', 'True') == 'True'
     # Prevent CSRF
     WTF_CSRF_ENABLED = True
+    # For production, add your actual domain
+    WTF_CSRF_TRUSTED_ORIGINS = [
+        f"https://{os.environ.get('DOMAIN_NAME', 'yourdomain.com')}",
+        f"http://{os.environ.get('DOMAIN_NAME', 'yourdomain.com')}"
+    ]

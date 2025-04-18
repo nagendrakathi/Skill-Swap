@@ -7,6 +7,10 @@ from datetime import datetime
 import os
 import logging
 from logging.handlers import RotatingFileHandler
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+# Add this right after the app is created
+app = Flask(__name__)
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -17,7 +21,7 @@ csrf = CSRFProtect()
 
 def create_app(config_class=None):
     app = Flask(__name__)
-
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
     # Choose configuration based on environment
     if os.environ.get('FLASK_ENV') == 'production':
         app.config.from_object(ProductionConfig)
